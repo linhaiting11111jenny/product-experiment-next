@@ -88,38 +88,6 @@ export function ExperimentPage({
   const [loadMoreClicks, setLoadMoreClicks] = useState(0);
   const shownReviews = useMemo(() => REVIEWS.slice(0, visibleCount), [visibleCount]);
 
-  const buildSessionSnapshot = () => {
-    const now = Date.now();
-    const hiddenMs =
-      totalHiddenMsRef.current + (hiddenAtRef.current ? now - hiddenAtRef.current : 0);
-    const elapsedMs = now - startAt.current;
-    const visibleMs = Math.max(elapsedMs - hiddenMs, 0);
-
-    const reviewOpenElapsedMs = reviewOpenedAtRef.current ? now - reviewOpenedAtRef.current : 0;
-    const reviewHiddenMs =
-      reviewHiddenMsRef.current +
-      (reviewHiddenStartedAtRef.current ? now - reviewHiddenStartedAtRef.current : 0);
-    const reviewVisibleMs = reviewOpenedAtRef.current
-      ? Math.max(reviewOpenElapsedMs - reviewHiddenMs, 0)
-      : 0;
-
-    return {
-      sessionId: sessionIdRef.current,
-      uid,
-      condition,
-      loadMoreClicks,
-      reviewPanelViewed: viewedReviews,
-      returnUrlPresent: Boolean(returnUrl),
-      elapsedSeconds: Math.round(elapsedMs / 1000),
-      visibleSeconds: Math.round(visibleMs / 1000),
-      hiddenSeconds: Math.round(hiddenMs / 1000),
-      reviewOpenElapsedSeconds: Math.round(reviewOpenElapsedMs / 1000),
-      reviewVisibleSeconds: Math.round(reviewVisibleMs / 1000),
-      maxScrollPercent: Math.round(maxScrollPercentRef.current),
-      visibleReviewCount: visibleCount
-    };
-  };
-
   useEffect(() => {
     if (mountedRef.current) {
       return;
@@ -137,6 +105,38 @@ export function ExperimentPage({
   }, [condition, returnUrl, uid]);
 
   useEffect(() => {
+    const buildSessionSnapshot = () => {
+      const now = Date.now();
+      const hiddenMs =
+        totalHiddenMsRef.current + (hiddenAtRef.current ? now - hiddenAtRef.current : 0);
+      const elapsedMs = now - startAt.current;
+      const visibleMs = Math.max(elapsedMs - hiddenMs, 0);
+
+      const reviewOpenElapsedMs = reviewOpenedAtRef.current ? now - reviewOpenedAtRef.current : 0;
+      const reviewHiddenMs =
+        reviewHiddenMsRef.current +
+        (reviewHiddenStartedAtRef.current ? now - reviewHiddenStartedAtRef.current : 0);
+      const reviewVisibleMs = reviewOpenedAtRef.current
+        ? Math.max(reviewOpenElapsedMs - reviewHiddenMs, 0)
+        : 0;
+
+      return {
+        sessionId: sessionIdRef.current,
+        uid,
+        condition,
+        loadMoreClicks,
+        reviewPanelViewed: viewedReviews,
+        returnUrlPresent: Boolean(returnUrl),
+        elapsedSeconds: Math.round(elapsedMs / 1000),
+        visibleSeconds: Math.round(visibleMs / 1000),
+        hiddenSeconds: Math.round(hiddenMs / 1000),
+        reviewOpenElapsedSeconds: Math.round(reviewOpenElapsedMs / 1000),
+        reviewVisibleSeconds: Math.round(reviewVisibleMs / 1000),
+        maxScrollPercent: Math.round(maxScrollPercentRef.current),
+        visibleReviewCount: visibleCount
+      };
+    };
+
     const updateScrollDepth = () => {
       const viewport = window.innerHeight;
       const fullHeight = document.documentElement.scrollHeight;
@@ -214,6 +214,38 @@ export function ExperimentPage({
     };
   }, [condition, loadMoreClicks, returnUrl, uid, viewedReviews, visibleCount]);
 
+  const getSessionSnapshot = () => {
+    const now = Date.now();
+    const hiddenMs =
+      totalHiddenMsRef.current + (hiddenAtRef.current ? now - hiddenAtRef.current : 0);
+    const elapsedMs = now - startAt.current;
+    const visibleMs = Math.max(elapsedMs - hiddenMs, 0);
+
+    const reviewOpenElapsedMs = reviewOpenedAtRef.current ? now - reviewOpenedAtRef.current : 0;
+    const reviewHiddenMs =
+      reviewHiddenMsRef.current +
+      (reviewHiddenStartedAtRef.current ? now - reviewHiddenStartedAtRef.current : 0);
+    const reviewVisibleMs = reviewOpenedAtRef.current
+      ? Math.max(reviewOpenElapsedMs - reviewHiddenMs, 0)
+      : 0;
+
+    return {
+      sessionId: sessionIdRef.current,
+      uid,
+      condition,
+      loadMoreClicks,
+      reviewPanelViewed: viewedReviews,
+      returnUrlPresent: Boolean(returnUrl),
+      elapsedSeconds: Math.round(elapsedMs / 1000),
+      visibleSeconds: Math.round(visibleMs / 1000),
+      hiddenSeconds: Math.round(hiddenMs / 1000),
+      reviewOpenElapsedSeconds: Math.round(reviewOpenElapsedMs / 1000),
+      reviewVisibleSeconds: Math.round(reviewVisibleMs / 1000),
+      maxScrollPercent: Math.round(maxScrollPercentRef.current),
+      visibleReviewCount: visibleCount
+    };
+  };
+
   const handleViewReviews = async () => {
     if (!reviewOpenedAtRef.current) {
       reviewOpenedAtRef.current = Date.now();
@@ -232,7 +264,7 @@ export function ExperimentPage({
       event: "view_reviews",
       reviewPanelViewed: true,
       loadMoreClicks,
-      ...buildSessionSnapshot(),
+      ...getSessionSnapshot(),
       visibleReviewCount: REVIEWS_PER_PAGE
     });
   };
@@ -249,7 +281,7 @@ export function ExperimentPage({
       event: "load_more",
       reviewPanelViewed: true,
       loadMoreClicks: nextClicks,
-      ...buildSessionSnapshot(),
+      ...getSessionSnapshot(),
       visibleReviewCount: Math.min(visibleCount + REVIEWS_PER_PAGE, REVIEWS.length)
     });
   };
