@@ -156,9 +156,6 @@ export function ExperimentPage({
         }
 
         void trackEvent({
-          sessionId: sessionIdRef.current,
-          uid,
-          condition,
           event: "page_hidden",
           ...buildSessionSnapshot()
         });
@@ -177,9 +174,6 @@ export function ExperimentPage({
       }
 
       void trackEvent({
-        sessionId: sessionIdRef.current,
-        uid,
-        condition,
         event: "page_visible",
         ...buildSessionSnapshot()
       });
@@ -258,12 +252,7 @@ export function ExperimentPage({
     setVisibleCount(REVIEWS_PER_PAGE);
 
     await trackEvent({
-      sessionId: sessionIdRef.current,
-      uid,
-      condition,
       event: "view_reviews",
-      reviewPanelViewed: true,
-      loadMoreClicks,
       ...getSessionSnapshot(),
       visibleReviewCount: REVIEWS_PER_PAGE
     });
@@ -275,13 +264,9 @@ export function ExperimentPage({
     setVisibleCount((current) => Math.min(current + REVIEWS_PER_PAGE, REVIEWS.length));
 
     await trackEvent({
-      sessionId: sessionIdRef.current,
-      uid,
-      condition,
       event: "load_more",
-      reviewPanelViewed: true,
-      loadMoreClicks: nextClicks,
       ...getSessionSnapshot(),
+      loadMoreClicks: nextClicks,
       visibleReviewCount: Math.min(visibleCount + REVIEWS_PER_PAGE, REVIEWS.length)
     });
   };
