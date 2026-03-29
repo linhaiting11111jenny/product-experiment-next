@@ -113,3 +113,45 @@ data/experiment-events.jsonl
 
 - Supabase 提供免费数据库额度，适合你这种实验数据记录场景
 - 这个仓库已经带好了 SQL 建表脚本，只需要在 Supabase 执行一次
+
+## 阿里云 / 腾讯云部署
+
+如果 `vercel.app` 在中国大陆访问不稳定，更适合的路径通常是：
+
+- 购买中国香港节点的轻量服务器或云服务器
+- 安装 1Panel
+- 用 Docker 部署这个仓库
+- 继续复用 Supabase 数据库
+
+这样通常比直接使用海外 Serverless 域名更容易被中国大陆用户访问，同时也比中国大陆服务器少一层备案压力。
+
+### 推荐方案
+
+- 区域优先选中国香港
+- 系统建议选 Ubuntu 22.04 LTS
+- 开放端口：`22`、`80`、`443`、`1Panel 面板端口`
+- 用 Docker 构建本项目，容器内监听 `3000`
+- 用 1Panel 或 Nginx 反向代理到 `80/443`
+
+### 需要配置的环境变量
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+EXPERIMENT_STORAGE_PREFIX=product-experiment
+```
+
+### Docker 部署文件
+
+项目已经提供：
+
+- [Dockerfile](/Users/linhaiting/Documents/codex/product-experiment-next/Dockerfile)
+- [.dockerignore](/Users/linhaiting/Documents/codex/product-experiment-next/.dockerignore)
+
+### 适合的部署方式
+
+1. 在服务器安装 Docker 和 1Panel
+2. 在 1Panel 中创建容器应用，或直接用 GitHub 仓库拉代码构建镜像
+3. 设置上述环境变量
+4. 暴露容器 `3000` 端口
+5. 通过 1Panel 网站 / 反向代理，把公网 `80` 或 `443` 转发到容器 `3000`
