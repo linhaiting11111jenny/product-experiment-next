@@ -311,30 +311,47 @@ export function ExperimentPage({
       </section>
 
       <section className="mb-5 rounded-lg border border-[#e0e0e0] bg-white p-[25px]">
-        <div className="mb-[15px] border-l-4 border-l-[#ffa500] pl-[10px] text-lg font-semibold text-[#ffa500]">
-          {condition === "rating" ? "评分分布详情" : "用户评论总结"}
-        </div>
-
         {condition === "rating" ? (
-          <div className="flex flex-col gap-3">
-            {PRODUCT.distribution.map((item) => (
-              <div key={item.star} className="flex items-center gap-[10px]">
-                <div className="w-10 text-[13px] text-[#666]">{item.star}星</div>
-                <div className="h-3 flex-1 overflow-hidden rounded-md bg-[#eee]">
-                  <div
-                    className="h-full bg-[#ffa500]"
-                    style={{ width: `${item.percent}%` }}
-                  />
+          <>
+            <div className="mb-[15px] border-l-4 border-l-[#ffa500] pl-[10px] text-lg font-semibold text-[#ffa500]">
+              评分分布详情
+            </div>
+
+            <div className="flex flex-col gap-3">
+              {PRODUCT.distribution.map((item) => (
+                <div key={item.star} className="flex items-center gap-[10px]">
+                  <div className="w-10 text-[13px] text-[#666]">{item.star}星</div>
+                  <div className="h-3 flex-1 overflow-hidden rounded-md bg-[#eee]">
+                    <div
+                      className="h-full bg-[#ffa500]"
+                      style={{ width: `${item.percent}%` }}
+                    />
+                  </div>
+                  <div className="w-10 text-right text-[13px] text-[#666]">{item.percent}%</div>
                 </div>
-                <div className="w-10 text-right text-[13px] text-[#666]">{item.percent}%</div>
-              </div>
-            ))}
-            <div className="mt-[15px] text-[13px] italic text-[#666]">以上是详细的评分分布。</div>
-          </div>
+              ))}
+              <div className="mt-[15px] text-[13px] italic text-[#666]">以上是详细的评分分布。</div>
+            </div>
+          </>
         ) : (
-          <div className="rounded border border-dashed border-[#ffdca8] bg-[#fffaf0] p-[15px] text-[15px] leading-8 text-[#444]">
-            <span className="font-semibold">AI 评论总结：</span>
-            {CONDITION_SUMMARIES[condition]}
+          <div className="overflow-hidden rounded-[18px] border border-[#f3cb88] bg-[linear-gradient(135deg,#fff8ec_0%,#fffdf8_55%,#fff4df_100%)] shadow-[0_10px_22px_rgba(255,165,0,0.1)]">
+            <div className="flex items-center justify-between gap-4 border-b border-[#f1d5a1] bg-[rgba(255,165,0,0.12)] px-5 py-4 max-[640px]:flex-col max-[640px]:items-start">
+              <div>
+                <div className="mb-1 inline-flex items-center rounded-full bg-[#fff] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#d68a00] shadow-[0_4px_10px_rgba(214,138,0,0.08)]">
+                  AI Insight
+                </div>
+                <div className="text-[22px] font-semibold text-[#d68a00]">AI评论总结</div>
+              </div>
+              <div className="rounded-full border border-[#f0cb87] bg-white/85 px-3 py-1 text-sm text-[#cf8a12]">
+                基于用户原始评论生成
+              </div>
+            </div>
+
+            <div className="px-5 py-5">
+              <div className="rounded-[14px] border border-dashed border-[#efc983] bg-white/80 p-[18px] text-base leading-8 text-[#6a5430]">
+                {CONDITION_SUMMARIES[condition]}
+              </div>
+            </div>
           </div>
         )}
       </section>
@@ -344,7 +361,7 @@ export function ExperimentPage({
           <button
             type="button"
             onClick={handleViewReviews}
-            className="cursor-pointer rounded-[25px] border-none bg-[#6c757d] px-10 py-3 text-base text-white transition hover:bg-[#5a6268]"
+            className="cursor-pointer rounded-[25px] border-none bg-[#ffa500] px-10 py-3 text-base font-medium text-white transition hover:bg-[#e69500]"
           >
             查看用户原始评论
           </button>
@@ -353,7 +370,7 @@ export function ExperimentPage({
 
       <section className={`mb-[30px] rounded-lg bg-white p-[30px] ${viewedReviews ? "block" : "hidden"}`}>
         <div className="mb-[15px] border-l-4 border-l-[#333] pl-[10px] text-lg font-semibold text-[#333]">
-          原始评论列表
+          用户评论详情
         </div>
 
         <div>
@@ -371,13 +388,17 @@ export function ExperimentPage({
             <button
               type="button"
               onClick={handleLoadMore}
-              className="cursor-pointer rounded border border-[#999] bg-transparent px-5 py-2 text-[#666]"
+              className="cursor-pointer rounded border border-[#ffa500] bg-[#fff8ec] px-5 py-2 font-medium text-[#d68a00] transition hover:bg-[#ffefcc]"
             >
               点击加载更多评论
             </button>
           ) : null}
         </div>
       </section>
+
+      <div className="mb-10 rounded-lg border border-[#f1d7a3] bg-[#fff8eb] px-5 py-4 text-center text-[15px] leading-7 text-[#9b6d17]">
+        阅读完成后，请手动关闭当前商品详情页，并返回问卷继续作答。
+      </div>
 
     </div>
   );
