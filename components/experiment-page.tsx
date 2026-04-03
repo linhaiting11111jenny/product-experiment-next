@@ -272,45 +272,59 @@ export function ExperimentPage({
   };
 
   return (
-    <div className="mx-auto max-w-[1000px] px-5 py-5">
-      <section className="mb-5 flex gap-10 rounded-lg bg-white p-[30px] shadow-[0_2px_10px_rgba(0,0,0,0.05)] max-[860px]:flex-col">
-        <div className="relative basis-[400px] overflow-hidden rounded-lg border border-[#eee] max-[860px]:basis-auto">
-          <div className="relative aspect-square w-full">
-            <Image src="/product.jpg" alt={PRODUCT.name} fill className="object-cover" priority />
+    <div className="mx-auto max-w-[1000px] px-5 py-4">
+      <section className="mb-4 flex gap-6 rounded-lg bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.05)] max-[860px]:flex-col">
+        <div className="relative basis-[340px] overflow-hidden rounded-lg border border-[#eee] max-[860px]:basis-auto">
+          <div className="relative aspect-square w-full bg-white p-3">
+            <Image src="/product-watch.jpg" alt={PRODUCT.name} fill className="object-contain p-2" priority />
           </div>
         </div>
 
         <div className="flex-1">
-          <h1 className="mb-2 text-[26px] font-semibold text-[#111]">{PRODUCT.name}</h1>
-          <p className="mb-5 text-sm text-[#666]">分类：{PRODUCT.category}</p>
-          <div className="mb-[25px] text-2xl font-bold text-[#e4393c]">零售价：{PRODUCT.price}</div>
+          <h1 className="mb-3 text-[24px] font-semibold text-[#111]">{PRODUCT.name}</h1>
+          <div className="mb-4 inline-flex items-baseline gap-2 rounded-full bg-[#fff8ec] px-4 py-2 text-[#d68a00]">
+            <span className="text-sm font-medium">零售价</span>
+            <span className="text-[22px] font-bold text-[#ffa500]">{PRODUCT.price}</span>
+          </div>
 
           <table className="w-full border-collapse text-sm">
             <tbody>
-              {PRODUCT.details.map(([label, text]) => (
+              {PRODUCT.details.map(([label, text]) => {
+                let displayText: string = text;
+
+                if (label === "显示与佩戴") {
+                  displayText = "1.43英寸高清显示屏，轻量化设计，适合日常佩戴";
+                }
+
+                if (label === "健康监测") {
+                  displayText = "支持全天候心率、血氧与睡眠分析，提供异常提醒";
+                }
+
+                return (
                 <tr key={label} className="border-b border-[#eee]">
-                  <td className="w-[120px] py-3 pr-4 align-top font-medium text-[#888]">{label}</td>
-                  <td className="py-3 align-top text-[#333]">{text}</td>
+                  <td className="w-[120px] py-[10px] pr-4 align-top font-medium text-[#888]">{label}</td>
+                  <td className="py-[10px] align-top text-[#333]">{displayText}</td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
       </section>
 
-      <section className="mb-5 rounded-lg border border-[#e0e0e0] border-t-[4px] border-t-[#ffa500] bg-white p-[25px]">
-        <div className="mb-5 border-l-4 border-l-[#333] pl-[10px] text-lg font-semibold text-[#333]">
-          用户评分概览
+      <section className="mb-4 rounded-lg border border-[#e0e0e0] border-t-[4px] border-t-[#ffa500] bg-white p-5">
+        <div className="mb-3 border-l-4 border-l-[#333] pl-[10px] text-lg font-semibold text-[#333]">
+          商品评分
         </div>
 
-        <div className="mb-[10px] flex items-center gap-[15px]">
+        <div className="flex items-center gap-3">
           <div className="text-[20px] text-[#ffa500]">★★★★☆</div>
           <div className="text-lg font-bold">{PRODUCT.averageRating.toFixed(1)} / 5</div>
           <div className="text-sm text-[#666]">基于 {PRODUCT.totalReviews} 位真实用户评价</div>
         </div>
       </section>
 
-      <section className="mb-5 rounded-lg border border-[#e0e0e0] bg-white p-[25px]">
+      <section className="mb-4 rounded-lg border border-[#e0e0e0] bg-white p-5">
         {condition === "rating" ? (
           <>
             <div className="mb-[15px] border-l-4 border-l-[#ffa500] pl-[10px] text-lg font-semibold text-[#ffa500]">
@@ -335,12 +349,9 @@ export function ExperimentPage({
           </>
         ) : (
           <div className="overflow-hidden rounded-[18px] border border-[#f3cb88] bg-[linear-gradient(135deg,#fff8ec_0%,#fffdf8_55%,#fff4df_100%)] shadow-[0_10px_22px_rgba(255,165,0,0.1)]">
-            <div className="flex items-center justify-between gap-4 border-b border-[#f1d5a1] bg-[rgba(255,165,0,0.12)] px-5 py-4 max-[640px]:flex-col max-[640px]:items-start">
-              <div>
-                <div className="mb-1 inline-flex items-center rounded-full bg-[#fff] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#d68a00] shadow-[0_4px_10px_rgba(214,138,0,0.08)]">
-                  AI Insight
-                </div>
-                <div className="text-[22px] font-semibold text-[#d68a00]">AI评论总结</div>
+            <div className="flex items-center justify-between gap-4 border-b border-[#f1d5a1] px-5 py-4 max-[640px]:flex-col max-[640px]:items-start">
+              <div className="border-l-4 border-l-[#ffa500] pl-[10px] text-lg font-semibold text-[#333]">
+                AI评论总结
               </div>
               <div className="rounded-full border border-[#f0cb87] bg-white/85 px-3 py-1 text-sm text-[#cf8a12]">
                 基于用户原始评论生成
